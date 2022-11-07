@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  curso-docker:
+    build: .
+    ports:
+      - 8080:80
+    environment:
+      - ConnectionString="Host=db;Port=5432;Pooling=true;Database=postgres;User Id=postgres;Password=postgres"
+    links:
+      - db
+    depends_on: #gera um dependencia e sobe os ambientes por hierarquia, só sobe um se o outro estiver pronto
+      - db
+  db:
+    #config de banco de dados
+    image: postgres #nome da imagem
+    volumes:
+      - postgres:/var/lib/ostgressql/data #disponivel no dockerhub 
+      #ports:
+      # - 5432:5432 exemplo caso eu quisesse expor a porta do db
+    environment:
+      - POSTGRES_DB=postgres #nome do db
+      - POSTGRES_USER=postgres #usuario do db
+      - POSTGRES_PASSWORD=postgres #senha do db
+volumes:
+  postgres: {}     

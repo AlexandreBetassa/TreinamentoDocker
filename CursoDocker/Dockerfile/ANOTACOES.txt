@@ -1,0 +1,54 @@
+O que seria o release?
+
+
+--COPY /pasta raiz/pasta destino "COPY . ./"
+--EXPOSE palavra reservada para expor a porta-- porta 80 API http porta 443 https
+
+
+=== COMANDOS BÁSICOS ===
+docker build . -t curso-docker ==== build da imagem => DOCKER BUILD <CAMINHO> -t PARA DEFINIR O NOME <NOME>
+
+docker run -p "porta" "nomeDaImagemDocker"
+docker kill <id-imagem>810ebc59084e
+
+docker run -p 8080:80 -d --restart=none curso
+                                   onfailure => quando tiver uma falha
+                                   always => sempre restartar
+                                    
+docker run -d -p 6379:6379 -v ~/redis-dump:/data redis
+
+=== ADICIONAR SOLUTION AO PROJETO ===
+dotnet new sln;
+dotnet sln add <NomProj>.csproj
+
+=== build docker compose ===
+docker-compose build
+docker compose up -d
+docker compose down -d
+docker network ls
+docker compose ps
+
+
+=== remove container docker ===
+docker container rm <Hash do container>
+
+=== remove imagem docker ===
+docker container rmi <Hash da img>
+
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build ==== Especifico de onde vai ser a imagem docker gerada
+WORKDIR /app                                   ==== CRIACAO DA PASTA DA APLICACAO DA IMAGEM PARA EFETUAR SOMENTE O RESTORE NOS ARQUIVOS QUE EU CRIEI
+COPY <HOST> <DESTINATION>                      ==== COPIO OS ARUIVOS DO MEU DIRETORIO RAIZ PARA O DIRETORIO DESTINO
+RUN dotnet restore                             ==== EFETUO O RESTORE DO DOTNET DA MINHA PLICAÇÃO
+RUN dotnet publish -c Release -o /out          ==== PUBLICANDO APLICAÇÃO COLOCANDO EM MODO RELEASE ENVIANDO TODOS OS ARQUIVOS PARA O DIRETORIO OUTPÚT DA IMAGEM
+FROM mcr.microsoft.com/dotnet/aspnet:6.0       ====
+WORKDIR /out                                   ====ACESSA O DIRTORIO OUTPUT
+COPY --from=build / app/out                    ==== 
+EXPOSE 80                                      ==== LIBERA A PORTA PARA ACESSO, SE TIVESSE CERTIFICADO LIBERARIA 443 FICANDO 80 443 5000
+ENTRYPOINT ["dotnet", "CursoDocker.dll"]       ==== ESPECIFICAR O PROCESSO PARA EXECUÇÃO POSSO TAMBEM USAS "CMD" AO INVÉS DE ENTRYPOINT
+                                               ==== CMD É DINAMICO E ENTRYPOINT É ESTATICO
+
+
+VOLUMES GERENCIADO E NÃO GERENCIADOS EM DOCKER
+
+VARIOS FROM's SGNIFICA UTILIZÇÃO EM MULTISTAGE
+
